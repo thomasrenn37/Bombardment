@@ -64,9 +64,8 @@ void ABaseCharacter::InputThrowExplosive()
 		UE_LOG(LogTemp, Warning, TEXT("Player Threw An Explosive"));
 
 		// Spawn an explosive at the offset.
-		FTransform ExplosiveTransform = FTransform(GetTransform().GetLocation());
-		
-		ExplosiveTransform.AddToTranslation(GetActorForwardVector() * 4);
+		FTransform ExplosiveTransform = FTransform(GetTransform());
+		ExplosiveTransform.AddToTranslation(GetActorForwardVector() * 100);
 		GetWorld()->SpawnActor<ABaseThrowable>(ExplosiveThrowable, ExplosiveTransform);
 	}
 }
