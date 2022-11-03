@@ -17,12 +17,14 @@ public:
 	// Sets default values for this actor's properties
 	ABaseThrowable();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UStaticMeshComponent* ThrowableStaticMesh;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		UStaticMeshComponent* ThrowableStaticMesh;
+	
 
 public:	
 	// Called every frame

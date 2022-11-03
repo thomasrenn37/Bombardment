@@ -12,8 +12,6 @@ ABaseThrowable::ABaseThrowable()
 	ThrowableStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ThrowableStaticMesh"));
 	ThrowableStaticMesh->SetupAttachment(RootComponent);
 
-	// The Throwable object should always simulate physics.
-	ThrowableStaticMesh->SetSimulatePhysics(true);
 }
 
 // Called when the game starts or when spawned

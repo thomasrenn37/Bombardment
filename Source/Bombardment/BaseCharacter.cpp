@@ -4,6 +4,8 @@
 #include "BaseCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "BaseThrowable.h"
+#include "Engine/EngineTypes.h"
+
 
 // Sets default values
 ABaseCharacter::ABaseCharacter()
@@ -59,14 +61,32 @@ void ABaseCharacter::InputMoveForward(float value)
 
 void ABaseCharacter::InputThrowExplosive()
 {
+	if (this->currentExplosiveThrowable) 
+	{
+		currentExplosiveThrowable->ThrowableStaticMesh->SetSimulatePhysics(true);
+		FVector Impulse = GetActorForwardVector() * ThrowStrength;
+		currentExplosiveThrowable->ThrowableStaticMesh->AddImpulse(Impulse);
+		currentExplosiveThrowable = nullptr;
+	}
+}
+
+void ABaseCharacter::InputSpawnExplosive()
+{
 	if (ExplosiveThrowable)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Player Threw An Explosive"));
 
-		// Spawn an explosive at the offset.
-		FTransform ExplosiveTransform = FTransform(GetTransform());
-		ExplosiveTransform.AddToTranslation(GetActorForwardVector() * 100);
-		GetWorld()->SpawnActor<ABaseThrowable>(ExplosiveThrowable, ExplosiveTransform);
+		// Get the socket location and the rotation of the 
+		FVector Location = GetMesh()->GetSocketLocation("SocketExplosiveThrowable");
+		FRotator Rotate = FRotator();
+		
+		// Spawn an explosive at the socket.
+		currentExplosiveThrowable = GetWorld()->SpawnActor<ABaseThrowable>(ExplosiveThrowable, Location, Rotate);
+		FAttachmentTransformRules fTransRules = FAttachmentTransformRules(EAttachmentRule::KeepWorld, true);
+
+		// Attach the Explosive throwable to the socket.
+		currentExplosiveThrowable->AttachToComponent(GetMesh(), fTransRules, "SocketExplosiveThrowable");
+		currentExplosiveThrowable->ThrowableStaticMesh->SetSimulatePhysics(false);
 	}
 }
 
@@ -74,6 +94,8 @@ void ABaseCharacter::InputThrowExplosive()
 void ABaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	
+
 
 }
 
@@ -97,6 +119,7 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	//PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &APlayerCharacter::BeginSprint);
 	//PlayerInputComponent->BindAction("Sprint", IE_Released, this, &APlayerCharacter::EndSprint);
 
-	PlayerInputComponent->BindAction("InputThrowExplosive", IE_Pressed, this, &ABaseCharacter::InputThrowExplosive);
+	PlayerInputComponent->BindAction("InputThrowExplosive", IE_Pressed, this, &ABaseCharacter::InputSpawnExplosive);
+	PlayerInputComponent->BindAction("InputThrowExplosive", IE_Released, this, &ABaseCharacter::InputThrowExplosive);
 }
 

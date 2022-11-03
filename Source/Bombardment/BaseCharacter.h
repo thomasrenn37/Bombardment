@@ -30,7 +30,7 @@ protected:
 
 	// Player input actions.
 	void InputThrowExplosive();
-
+	void InputSpawnExplosive();
 
 	// Player follow camera
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Camera")
@@ -41,6 +41,11 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "ExplosiveThrowables")
 		TSubclassOf<ABaseThrowable> ExplosiveThrowable;
+
+	UPROPERTY(EditDefaultsOnly, Category = "ExplosiveThrowables")
+		float ThrowStrength = 100.0f;
+
+	ABaseThrowable* currentExplosiveThrowable;
 
 public:	
 	// Called every frame
