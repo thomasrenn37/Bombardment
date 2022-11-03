@@ -45,6 +45,10 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "ExplosiveThrowables")
 		float ThrowStrength = 100.0f;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Character Attributes")
+		float HealthAmount = 100.0f;
+
+
 	ABaseThrowable* currentExplosiveThrowable;
 
 public:	
