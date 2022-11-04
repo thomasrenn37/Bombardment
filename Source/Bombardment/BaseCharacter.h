@@ -45,7 +45,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "ExplosiveThrowables")
 		float ThrowStrength = 100.0f;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Character Attributes")
+	UPROPERTY(BluePrintReadWrite, EditAnywhere, Category = "Character Attributes")
 		float HealthAmount = 100.0f;
 
 

@@ -20,6 +20,8 @@ ABaseCharacter::ABaseCharacter()
 	// Enable the use of the controller to determine rotations of the player.
 	bUseControllerRotationPitch = 1;
 	bUseControllerRotationYaw = 1;
+
+	currentExplosiveThrowable = nullptr;
 } 
 
 // Called when the game starts or when spawned
