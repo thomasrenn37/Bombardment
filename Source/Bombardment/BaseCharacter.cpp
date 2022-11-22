@@ -63,10 +63,10 @@ void ABaseCharacter::InputMoveForward(float value)
 
 void ABaseCharacter::InputThrowExplosive()
 {
-	if (this->currentExplosiveThrowable) 
+	if (currentExplosiveThrowable) 
 	{
 		currentExplosiveThrowable->ThrowableStaticMesh->SetSimulatePhysics(true);
-		FVector Impulse = GetActorForwardVector() * ThrowStrength;
+		FVector Impulse = GetActorForwardVector() * currentExplosiveThrowable->ThrowStrength;
 		currentExplosiveThrowable->ThrowableStaticMesh->AddImpulse(Impulse);
 		currentExplosiveThrowable = nullptr;
 	}
@@ -80,7 +80,7 @@ void ABaseCharacter::InputSpawnExplosive()
 
 		// Get the socket location and the rotation of the 
 		FVector Location = GetMesh()->GetSocketLocation("SocketExplosiveThrowable");
-		FRotator Rotate = FRotator();
+		FRotator Rotate = FRotator(GetActorRotation());
 		
 		// Spawn an explosive at the socket.
 		currentExplosiveThrowable = GetWorld()->SpawnActor<ABaseThrowable>(ExplosiveThrowable, Location, Rotate);

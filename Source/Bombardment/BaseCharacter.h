@@ -39,7 +39,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
 		FVector throwableOffset;
 
-	UPROPERTY(EditDefaultsOnly, Category = "ExplosiveThrowables")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ExplosiveThrowables")
 		TSubclassOf<ABaseThrowable> ExplosiveThrowable;
 
 	UPROPERTY(EditDefaultsOnly, Category = "ExplosiveThrowables")

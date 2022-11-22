@@ -20,6 +20,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UStaticMeshComponent* ThrowableStaticMesh;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float ThrowStrength;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
