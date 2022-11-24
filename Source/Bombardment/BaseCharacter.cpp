@@ -65,10 +65,24 @@ void ABaseCharacter::InputThrowExplosive()
 {
 	if (currentExplosiveThrowable) 
 	{
-		currentExplosiveThrowable->ThrowableStaticMesh->SetSimulatePhysics(true);
-		FVector Impulse = GetActorForwardVector() * currentExplosiveThrowable->ThrowStrength;
-		currentExplosiveThrowable->ThrowableStaticMesh->AddImpulse(Impulse);
-		currentExplosiveThrowable = nullptr;
+		//currentExplosiveThrowable->ThrowableStaticMesh->SetSimulatePhysics(true);
+		FDetachmentTransformRules DetachmentRules(EDetachmentRule::KeepWorld, EDetachmentRule::KeepWorld, EDetachmentRule::KeepWorld, false);
+
+		currentExplosiveThrowable->DetachFromActor(DetachmentRules);
+		currentExplosiveThrowable->ProjectileMovementComp->SetActive(true);
+		currentExplosiveThrowable->ProjectileMovementComp->SetUpdatedComponent()
+		FVector vec = GetActorForwardVector();
+		//currentExplosiveThrowable->ProjectileMovementComp->AddForce(vec * currentExplosiveThrowable->ProjectileMovementComp->InitialSpeed);
+		//FVector Impulse = GetActorForwardVector() * currentExplosiveThrowable->ThrowStrength;
+		//currentExplosiveThrowable->ThrowableStaticMesh->AddImpulse(Impulse);
+		
+		// Check if the throwable implements its own tick function.
+		//if (currentExplosiveThrowable->bOverideTick)
+		//	currentExplosiveThrowable->SetActorTickEnabled(true);
+
+		
+		
+		//currentExplosiveThrowable = nullptr;
 	}
 }
 
@@ -85,7 +99,7 @@ void ABaseCharacter::InputSpawnExplosive()
 		// Spawn an explosive at the socket.
 		currentExplosiveThrowable = GetWorld()->SpawnActor<ABaseThrowable>(ExplosiveThrowable, Location, Rotate);
 		FAttachmentTransformRules fTransRules = FAttachmentTransformRules(EAttachmentRule::KeepWorld, true);
-
+		
 		// Attach the Explosive throwable to the socket.
 		currentExplosiveThrowable->AttachToComponent(GetMesh(), fTransRules, "SocketExplosiveThrowable");
 		currentExplosiveThrowable->ThrowableStaticMesh->SetSimulatePhysics(false);

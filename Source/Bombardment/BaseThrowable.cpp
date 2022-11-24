@@ -12,6 +12,10 @@ ABaseThrowable::ABaseThrowable()
 	ThrowableStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ThrowableStaticMesh"));
 	ThrowableStaticMesh->SetupAttachment(RootComponent);
 
+	ProjectileMovementComp = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComp"));
+	//ProjectileMovementComp->SetActive(false);
+	ProjectileMovementComp->SetAutoActivate(false);
+	SetActorTickEnabled(false);
 }
 
 // Called when the game starts or when spawned

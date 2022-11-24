@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/StaticMeshComponent.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 
 #include "BaseThrowable.generated.h"
 
@@ -21,7 +22,16 @@ public:
 		UStaticMeshComponent* ThrowableStaticMesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UProjectileMovementComponent* ProjectileMovementComp;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float ThrowStrength;
+
+	// If true, the class implements its own tick function. The default value is false.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool bOverideTick = false;
+
+
 
 protected:
 	// Called when the game starts or when spawned
