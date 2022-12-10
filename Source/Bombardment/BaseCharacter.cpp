@@ -65,30 +65,21 @@ void ABaseCharacter::InputThrowExplosive()
 {
 	if (currentExplosiveThrowable) 
 	{
-		//currentExplosiveThrowable->ThrowableStaticMesh->SetSimulatePhysics(true);
+		// Detatch the throwable from the base character
 		FDetachmentTransformRules DetachmentRules(EDetachmentRule::KeepWorld, EDetachmentRule::KeepWorld, EDetachmentRule::KeepWorld, false);
-
 		currentExplosiveThrowable->DetachFromActor(DetachmentRules);
-		currentExplosiveThrowable->ProjectileMovementComp->SetActive(true);
-		currentExplosiveThrowable->ProjectileMovementComp->SetUpdatedComponent()
-		FVector vec = GetActorForwardVector();
-		//currentExplosiveThrowable->ProjectileMovementComp->AddForce(vec * currentExplosiveThrowable->ProjectileMovementComp->InitialSpeed);
-		//FVector Impulse = GetActorForwardVector() * currentExplosiveThrowable->ThrowStrength;
-		//currentExplosiveThrowable->ThrowableStaticMesh->AddImpulse(Impulse);
-		
-		// Check if the throwable implements its own tick function.
-		//if (currentExplosiveThrowable->bOverideTick)
-		//	currentExplosiveThrowable->SetActorTickEnabled(true);
 
-		
-		
-		//currentExplosiveThrowable = nullptr;
+		// Set the velocity of the throwables projectile component to be in the direction of the forward vector.
+		FVector forwardVec = currentExplosiveThrowable->GetActorForwardVector();
+		float initialSpeed = currentExplosiveThrowable->ProjectileMovementComp->InitialSpeed;
+		currentExplosiveThrowable->ProjectileMovementComp->Velocity = forwardVec * initialSpeed;
+		currentExplosiveThrowable->ProjectileMovementComp->SetActive(true);
 	}
 }
 
 void ABaseCharacter::InputSpawnExplosive()
 {
-	if (ExplosiveThrowable)
+	if (ExplosiveThrowableType)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Player Threw An Explosive"));
 
@@ -97,7 +88,7 @@ void ABaseCharacter::InputSpawnExplosive()
 		FRotator Rotate = FRotator(GetActorRotation());
 		
 		// Spawn an explosive at the socket.
-		currentExplosiveThrowable = GetWorld()->SpawnActor<ABaseThrowable>(ExplosiveThrowable, Location, Rotate);
+		currentExplosiveThrowable = GetWorld()->SpawnActor<ABaseThrowable>(ExplosiveThrowableType, Location, Rotate);
 		FAttachmentTransformRules fTransRules = FAttachmentTransformRules(EAttachmentRule::KeepWorld, true);
 		
 		// Attach the Explosive throwable to the socket.
@@ -117,6 +108,8 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	check(PlayerInputComponent);
+
 	// Movement bindings
 	PlayerInputComponent->BindAxis("InputMoveRight", this, &ABaseCharacter::InputMoveRight);
 	PlayerInputComponent->BindAxis("InputMoveForward", this, &ABaseCharacter::InputMoveForward);
@@ -127,10 +120,6 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	// Movement Actions
 	PlayerInputComponent->BindAction("InputJump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("InputJump", IE_Released, this, &ACharacter::StopJumping);
-	//PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &APlayerCharacter::BeginCrouch);
-	//PlayerInputComponent->BindAction("Crouch", IE_Released, this, &APlayerCharacter::EndCrouch);
-	//PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &APlayerCharacter::BeginSprint);
-	//PlayerInputComponent->BindAction("Sprint", IE_Released, this, &APlayerCharacter::EndSprint);
 
 	PlayerInputComponent->BindAction("InputThrowExplosive", IE_Pressed, this, &ABaseCharacter::InputSpawnExplosive);
 	PlayerInputComponent->BindAction("InputThrowExplosive", IE_Released, this, &ABaseCharacter::InputThrowExplosive);

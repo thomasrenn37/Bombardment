@@ -23,7 +23,6 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-
 	// Player movement inputs
 	void InputMoveRight(float value);
 	void InputMoveForward(float value);
@@ -36,18 +35,11 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Camera")
 		class UCameraComponent* CameraComp;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
-		FVector throwableOffset;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ExplosiveThrowables")
-		TSubclassOf<ABaseThrowable> ExplosiveThrowable;
-
-	UPROPERTY(EditDefaultsOnly, Category = "ExplosiveThrowables")
-		float ThrowStrength = 100.0f;
+		TSubclassOf<ABaseThrowable> ExplosiveThrowableType;
 
 	UPROPERTY(BluePrintReadWrite, EditAnywhere, Category = "Character Attributes")
 		float HealthAmount = 100.0f;
-
 
 	ABaseThrowable* currentExplosiveThrowable;
 
