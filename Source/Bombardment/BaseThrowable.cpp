@@ -18,6 +18,8 @@ ABaseThrowable::ABaseThrowable()
 	ProjectileMovementComp = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComp"));
 	ProjectileMovementComp->SetAutoActivate(false);
 	ProjectileMovementComp->bRotationFollowsVelocity = true;
+	ProjectileMovementComp->InitialSpeed = 1000.f;
+	ProjectileMovementComp->MaxSpeed = 1000.f;
 	SetActorTickEnabled(false);
 }
 

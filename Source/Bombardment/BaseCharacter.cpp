@@ -4,6 +4,7 @@
 #include "BaseCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "BaseThrowable.h"
+#include "Inventory.h"
 #include "Engine/EngineTypes.h"
 
 
@@ -20,6 +21,17 @@ ABaseCharacter::ABaseCharacter()
 	// Enable the use of the controller to determine rotations of the player.
 	bUseControllerRotationPitch = 1;
 	bUseControllerRotationYaw = 1;
+
+	PlayerInventory = MakeUnique<Inventory>();
+	if (PlayerInventory)
+	{
+		ExplosiveThrowableType = PlayerInventory->ThrowableOneClass();
+
+		if (!ExplosiveThrowableType)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("No Typee"));
+		}
+	}
 
 	currentExplosiveThrowable = nullptr;
 } 
@@ -97,6 +109,29 @@ void ABaseCharacter::InputSpawnExplosive()
 	}
 }
 
+void ABaseCharacter::EquipThrowableOne()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Player Equip One Explosive"));
+	if (Throwables.Num() >= 1)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Player Equip One Explosive///////////"));
+
+		ExplosiveThrowableType = Throwables[0].LoadSynchronous();
+	}
+}
+
+void ABaseCharacter::EquipThrowableTwo()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Player Equip Two Explosive"));
+
+	if (Throwables.Num() >= 2)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Player Equip Two Explosive/////////"));
+
+		ExplosiveThrowableType = Throwables[1].LoadSynchronous();
+	}
+}
+
 // Called every frame
 void ABaseCharacter::Tick(float DeltaTime)
 {
@@ -123,5 +158,9 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 	PlayerInputComponent->BindAction("InputThrowExplosive", IE_Pressed, this, &ABaseCharacter::InputSpawnExplosive);
 	PlayerInputComponent->BindAction("InputThrowExplosive", IE_Released, this, &ABaseCharacter::InputThrowExplosive);
+
+	// Just bind actions. Should probably use a 
+	PlayerInputComponent->BindAction("InputEquipThrowableOne", IE_Pressed, this, &ABaseCharacter::EquipThrowableOne);
+	PlayerInputComponent->BindAction("InputEquipThrowableTwo", IE_Pressed, this, &ABaseCharacter::EquipThrowableTwo);
 }
 
